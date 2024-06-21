@@ -88,7 +88,13 @@ export class SfCommandError extends SfError {
       ...this.toObject(),
       stack: this.stack,
       cause: inspect(this.cause),
-      warnings: this.warnings,
+      warnings: this.warnings?.map((warning: string | StructuredMessage) => {
+        if (typeof warning === 'string') {
+          return warning.replace(/(\r\n|\n|\r)/gm, ' ');
+        } else {
+          return warning.message.replace(/(\r\n|\n|\r)/gm, ' ');
+        }
+      }),
       code: this.code,
       status: this.status,
       commandName: this.commandName,

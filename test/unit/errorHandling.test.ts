@@ -153,6 +153,12 @@ describe('SfCommandError.toJson()', () => {
     });
     expect(result.stack).to.be.a('string').and.include('Error: foo');
   });
+  it('with warnings, removing new lines', () => {
+    const warnings = ['your\n version of node\n is over 10 years old'];
+    const result = SfCommandError.from(new Error('foo'), 'the:cmd', warnings).toJson();
+    expect(result.warnings).to.not.be.empty;
+    expect(result.warnings).to.deep.equal(['your  version of node  is over 10 years old']);
+  });
   describe('context', () => {
     it('sfError with context', () => {
       const sfError = SfError.create({
